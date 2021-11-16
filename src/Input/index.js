@@ -3,13 +3,13 @@ import { getFakeData1, getFakeData2 } from '../fakeRequest'
 
 const Input = ({ inputValue, onChangeInputValue }) => {
   const [inputValueInComponent, setInputValueInComponent] = useState('');
-  let users = [];
+  const [users, setUsers] = useState([]);
 
   const fetchData = async () => {
     const firstNameWithId = await getFakeData1()
     const lastNameWithId = await getFakeData2()
 
-    users = firstNameWithId.map(user => {
+    const newUserList = firstNameWithId.map(user => {
       const userLastname = lastNameWithId.find(item => item.id === user.id);
       if (userLastname) {
         const {lastName} = userLastname;
@@ -19,8 +19,9 @@ const Input = ({ inputValue, onChangeInputValue }) => {
     .filter(item => item !== undefined)
     .sort((a, b) => a.firstName.localeCompare(b.firstName));
 
+    setUsers(newUserList);
+
     console.log({firstNameWithId, lastNameWithId})
-    console.log(users);
   }
 
   useEffect(() => {
@@ -32,10 +33,21 @@ const Input = ({ inputValue, onChangeInputValue }) => {
   }, [inputValue]);
 
   return (
-    <input
-      onChange={e => onChangeInputValue(e.target.value)}
-      value={inputValueInComponent}
-    />
+    <div>
+        <input
+          onChange={e => onChangeInputValue(e.target.value)}
+          value={inputValueInComponent}
+        />
+        {(inputValueInComponent.length > 0 ) ? (
+          <div>
+            {users.map(user => {
+              if (user.firstName.toLowerCase().includes(inputValueInComponent.toLowerCase()) || user.lastName.toLowerCase().includes(inputValueInComponent.toLowerCase())) {
+                return <p key={user.id}>{user.firstName} {user.lastName}</p>
+              }
+            })}
+          </div>
+        ): null }
+    </div>
   )
 }
 
