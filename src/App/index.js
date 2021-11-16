@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Input from '../Input/index'
 import logo from '../resources/logo512.png'
 
-function App() {
+const App = () => {
   const [inputValue, setInputValue] = useState('');
 
   const onChangeInputValue = (value) => {

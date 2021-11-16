@@ -1,38 +1,30 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getFakeData1, getFakeData2 } from '../fakeRequest'
 
-export default class Input extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      inputValueInComponent: ''
-    }
-  }
+const Input = ({ inputValue, onChangeInputValue }) => {
+  const [inputValueInComponent, setInputValueInComponent] = useState('');
 
-  async componentDidMount() {
+  const fetchData = async () => {
     const firstNameWithId = await getFakeData1()
     const lastNameWithId = await getFakeData2()
 
     console.log({firstNameWithId, lastNameWithId})
   }
 
-  componentDidUpdate(prevProps) {
-    if(prevProps.inputValue !== this.props.inputValue) {
-      this.setState({
-        inputValueInComponent: this.props.inputValue
-      })
-    }
-  }
+  useEffect(() => {
+    fetchData();
+  }, [])
 
-  render() {
-    const { inputValueInComponent } = this.state
-    const { onChangeInputValue } = this.props
+  useEffect(() => {
+    setInputValueInComponent(inputValue);
+  }, [inputValue]);
 
-    return (
-      <input
-        onChange={e => onChangeInputValue(e.target.value)}
-        value={inputValueInComponent}
-      />
-    )
-  }
+  return (
+    <input
+      onChange={e => onChangeInputValue(e.target.value)}
+      value={inputValueInComponent}
+    />
+  )
 }
+
+export default Input;
