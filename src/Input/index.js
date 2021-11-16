@@ -15,8 +15,9 @@ const Input = ({ inputValue, onChangeInputValue }) => {
         const {lastName} = userLastname;
         return {...user, lastName}
       }
+      return null
     })
-    .filter(item => item !== undefined)
+    .filter(item => item !== null)
     .sort((a, b) => a.firstName.localeCompare(b.firstName));
 
     setUsers(newUserList);
@@ -44,6 +45,7 @@ const Input = ({ inputValue, onChangeInputValue }) => {
               if (user.firstName.toLowerCase().includes(inputValueInComponent.toLowerCase()) || user.lastName.toLowerCase().includes(inputValueInComponent.toLowerCase())) {
                 return <p key={user.id}>{user.firstName} {user.lastName}</p>
               }
+              return null
             })}
           </div>
         ): null }
